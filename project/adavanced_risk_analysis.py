@@ -12,10 +12,15 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 
-# Fetch historical data for given tickers
 def fetch_data(tickers, start_date, end_date):
-    return yf.download(tickers, start=start_date, end=end_date)['Adj Close']
-    adjusted_close = data['Adj Close']
+    data = yf.download(tickers, start=start_date, end=end_date)
+    
+    # Check if 'Adj Close' is in the data
+    if 'Adj Close' not in data.columns:
+        raise KeyError("'Adj Close' column not found in the data")
+    
+    return data
+    
 
 
 # Calculate daily returns
