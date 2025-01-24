@@ -4,6 +4,6 @@ pandas
 yfinance
 plotly
 seaborn
-sklearn
+scikit-learn
 scipy
 arch
