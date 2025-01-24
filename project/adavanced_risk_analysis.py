@@ -12,10 +12,9 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 
+# Fetch historical data for given tickers
 def fetch_data(tickers, start_date, end_date):
-    data = yf.download(tickers, start=start_date, end=end_date, actions=True)  # Fetch with actions
-    print(data.columns)  # Check columns
-    return data
+    return yf.download(tickers, start=start_date, end=end_date)['Adj Close']
 
 
 # Calculate daily returns
@@ -74,32 +73,12 @@ def generate_random_portfolios(returns, num_portfolios=5000, risk_free_rate=0.03
 
     return pd.DataFrame(results)
 
-def apply_pca(returns):
-    # Step 1: Clean data (remove NaN, non-numeric, and standardize)
-    returns_clean = returns.dropna()  # Or fill NaN values with mean
-    returns_clean = returns_clean.apply(pd.to_numeric, errors='coerce')
-    
-    # Step 2: Ensure the data has the right shape
-    if returns_clean.shape[0] < 2 or returns_clean.shape[1] < 2:
-        raise ValueError("Insufficient data for PCA. At least 2 samples and 2 features required.")
-    
-    # Step 3: Standardize the data
-    scaler = StandardScaler()
-    returns_scaled = scaler.fit_transform(returns_clean)
-    
-    # Step 4: Apply PCA
-    pca = PCA()
-    principal_components = pca.fit_transform(returns_scaled)
-    
-    # Step 5: Return the principal components and explained variance
+# Apply PCA for dimensionality reduction
+def apply_pca(returns, n_components=2):
+    pca = PCA(n_components=n_components)
+    principal_components = pca.fit_transform(returns)
     explained_variance = pca.explained_variance_ratio_
-    return principal_components, explained_variance
-
-# Example usage
-try:
-    pca_data, explained_variance = apply_pca(returns)
-except ValueError as e:
-    print(f"Error: {e}")
+    return pd.DataFrame(principal_components, columns=[f"PC{i+1}" for i in range(n_components)]), explained_variance
 # Time series forecasting using ARCH/GARCH models
 def forecast_volatility(data, asset, forecast_horizon=10, model_type="GARCH"):
     asset_returns = calculate_returns(data[[asset]])
