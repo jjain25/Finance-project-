@@ -14,11 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 # Fetch historical data for given tickers
 def fetch_data(tickers, start_date, end_date):
-    data = yf.download(tickers, start=start_date, end=end_date)
-    print(data.columns)  # Print columns to check if 'Adj Close' exists
-    if 'Adj Close' not in data.columns:
-        raise KeyError("'Adj Close' column not found in the data")
-    return data['Adj Close']
+    return yf.download(tickers, start=start_date, end=end_date)['Adj Close']
 
 # Calculate daily returns
 def calculate_returns(data):
