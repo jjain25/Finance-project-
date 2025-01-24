@@ -8,17 +8,10 @@ from sklearn.cluster import KMeans
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-import yfinance as yf
 
+# Fetch historical data for given tickers
 def fetch_data(tickers, start_date, end_date):
-    data = yf.download(tickers, start=start_date, end=end_date)
-    print(data.columns)  # Check if 'Adj Close' is present
-    return data
-
-# Usage
-data = fetch_data("AAPL", "2020-01-01", "2021-01-01")
-
-
+    return yf.download(tickers, start=start_date, end=end_date)['Adj Close']
 # Calculate daily returns
 def calculate_returns(data):
     return data.pct_change().dropna()
