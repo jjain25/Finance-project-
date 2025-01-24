@@ -9,9 +9,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-# Fetch historical data for given tickers
+
 def fetch_data(tickers, start_date, end_date):
-    return yf.download(tickers, start=start_date, end=end_date)['Adj Close']
+    data = yf.download(tickers, start=start_date, end=end_date, actions=True)  # Fetch with actions
+    print(data.columns)  # Check columns
+    return data
 # Calculate daily returns
 def calculate_returns(data):
     return data.pct_change().dropna()
