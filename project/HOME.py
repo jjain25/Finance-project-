@@ -28,7 +28,7 @@ def main():
         
     with col2:
         if st.button("PCA and Forecasting"):
-            st.write("Head to the PCA and Forecasting tab to uncover hidden patterns and predict future returns or volatility.")
+            st.write("Head to the Advance analysis tab to uncover hidden patterns and predict future returns or volatility.")
 
     with col3:
         if st.button("User-Defined Portfolio"):
