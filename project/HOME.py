@@ -63,9 +63,21 @@ def main():
 
     # Add an image or visual representation (optional)
     st.image(
-        "https://upload.wikimedia.org/wikipedia/commons/1/10/Financial_markets_graph.png",
+        "https://miro.medium.com/v2/resize:fit:825/1*TtTQVg3OKWOjkwPxoKG2Fg.jpeg",
         caption="Visualize and Optimize Your Portfolio",
         use_column_width=True,
+    )
+
+    
+    # Disclaimer section
+    st.markdown(
+        """
+        ---
+        **Disclaimer:** This application is for informational and educational purposes only. It does not constitute 
+        financial, investment, or legal advice. Users are encouraged to consult with a qualified financial advisor 
+        or conduct their own research before making any investment decisions. The app creators assume no responsibility 
+        for any losses or liabilities incurred from the use of this application.
+        """
     )
 
     # Call to action
