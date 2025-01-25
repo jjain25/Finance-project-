@@ -62,10 +62,10 @@ def main():
         )
 
     # Add an image or visual representation (optional)
-    st.image(
+    st.image(image, use_container_width=True)
         "https://miro.medium.com/v2/resize:fit:825/1*TtTQVg3OKWOjkwPxoKG2Fg.jpeg",
         caption="Visualize and Optimize Your Portfolio",
-        use_column_width=True,
+        
     )
 
     
