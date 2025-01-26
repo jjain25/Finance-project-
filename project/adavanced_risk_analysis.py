@@ -106,7 +106,7 @@ def forecast_volatility(data, asset, forecast_horizon=30, model_type="GARCH"):
         raise ValueError("Invalid model type. Choose 'ARCH' or 'GARCH'.")
 
     # Fit the model
-    res = model.fit(disp="off",ic="aic")
+    res = model.fit(disp="off")
 
     # Forecast volatility
     forecast = res.forecast(horizon=forecast_horizon)
