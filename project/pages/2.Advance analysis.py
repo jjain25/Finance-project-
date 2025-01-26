@@ -12,7 +12,7 @@ def main():
                                      "TCS.NS,ITC.NS,RELIANCE.NS,HDFCBANK.NS,INFY.NS")
     start_date = st.sidebar.date_input("Start Date", value=pd.to_datetime("2023-01-01"))
     end_date = st.sidebar.date_input("End Date", value=pd.to_datetime("today"))
-    risk_free_rate = st.sidebar.number_input("Risk-Free Rate (in decimal form):", value=0.03, step=0.01)
+    risk_free_rate = st.sidebar.number_input("Risk-Free Rate (in decimal form):", value=0.04, step=0.01)
 
     tickers = tickers.split(',')
     data = fetch_data(tickers, start_date, end_date)
@@ -163,11 +163,17 @@ def main():
                 # Predict returns for the next period
                 latest_data = returns.iloc[-lookback:].values.flatten().reshape(1, -1)
                 predicted_returns = model.predict(latest_data).flatten()
+                # Convert the predicted returns to percentages
+                predicted_returns_percent = predicted_returns * 100
+
+                # Format the predicted returns as strings with '%' symbol
+                predicted_returns_percent_str = [f"{value:.2f}%" for value in predicted_returns_percent]
+
 
                 # Display predictions
                 st.write("### Predicted Returns for Each Asset")
                 predicted_df = pd.DataFrame(
-                    {"Asset": returns.columns, "Predicted Return": predicted_returns}
+                    {"Asset": returns.columns, "Predicted Return": predicted_returns_percent_str}
                 )
                 st.dataframe(predicted_df)
 

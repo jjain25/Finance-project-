@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 # Fetch historical data for given tickers
 def fetch_data(tickers, start_date, end_date):
-    return yf.download(tickers, start=start_date, end=end_date)['Close']
+    return yf.download(tickers, start=start_date, end=end_date)['Adj Close']
 
 # Calculate daily returns
 def calculate_returns(data):
@@ -30,7 +30,7 @@ def risk_parity_portfolio(returns):
         portfolio_variance = np.dot(weights.T, np.dot(cov_matrix, weights))
         marginal_risks = np.dot(cov_matrix, weights)
         risk_contribution = weights * marginal_risks
-        return np.sum((risk_contribution / portfolio_variance - 1 / n_assets) ** 2)
+        return np.sum((risk_contribution / (portfolio_variance + 1e-8) - 1 / n_assets) ** 2)
 
     # Initial equal weights
     init_weights = np.ones(n_assets) / n_assets
@@ -106,7 +106,7 @@ def forecast_volatility(data, asset, forecast_horizon=30, model_type="GARCH"):
         raise ValueError("Invalid model type. Choose 'ARCH' or 'GARCH'.")
 
     # Fit the model
-    res = model.fit(disp="off")
+    res = model.fit(disp="off",ic="aic")
 
     # Forecast volatility
     forecast = res.forecast(horizon=forecast_horizon)
@@ -169,7 +169,7 @@ def plot_pca_results(pca_data, explained_variance):
 
     # Add explained variance to the title
     fig.update_layout(
-        title=f"PCA Results<br>(Explained Variance: PC1: {explained_variance[0]:.2f}%, PC2: {explained_variance[1]:.2f}%)",
+        title=f"PCA Results<br> Explained Variance: PC1: {explained_variance[0]*100:.2f}%, PC2: {explained_variance[1]*100:.2f}%",
         xaxis=dict(title='Principal Component 1'),
         yaxis=dict(title='Principal Component 2'),
         template='plotly_white',
@@ -198,7 +198,7 @@ def plot_pca_results(pca_data, explained_variance):
 
 
 
-def plot_efficient_frontier_with_risk_parity(returns, risk_free_rate=0.03):
+def plot_efficient_frontier_with_risk_parity(returns, risk_free_rate=0.04):
     """Plot efficient frontier with random portfolios and Risk Parity Portfolio."""
     random_portfolios = generate_random_portfolios(returns, risk_free_rate=risk_free_rate)
     risk_parity_weights = risk_parity_portfolio(returns)
