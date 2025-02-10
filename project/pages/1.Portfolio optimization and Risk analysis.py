@@ -46,10 +46,12 @@ def main():
         tabs = st.tabs(["Portfolio Optimization", "Risk Metrics", "Asset Clustering"])
 
         # Tab 1: Portfolio Optimization
+
         with tabs[0]:
             st.subheader("Optimized Portfolio")
             if method == "Monte Carlo Simulation":
-                portfolio_df, optimal_portfolio, min_vol_portfolio = monte_carlo_simulation(returns, risk_free_rate=risk_free_rate)
+                #def monte_carlo_simulation(returns, num_portfolios=5000, risk_free_rate=0.03):
+                portfolio_df, optimal_portfolio, min_vol_portfolio = monte_carlo_simulation(returns,num_simulations, risk_free_rate=risk_free_rate)
                 weights = optimal_portfolio['Weights']
                 
                 st.write("### Optimal Portfolio Weights")
@@ -96,7 +98,7 @@ def main():
 
 
             elif method == "Mean-Variance Optimization":
-                weights = optimize_portfolio(returns)
+                weights = optimize_portfolio(returns,risk_free_rate)
                 st.write("### Optimal Portfolio Weights")
                 st.dataframe(pd.DataFrame({'Ticker': tickers, 'Weight': weights}))
 

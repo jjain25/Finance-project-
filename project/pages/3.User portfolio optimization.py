@@ -56,9 +56,12 @@ def main():
             # Fetch historical data
             start_date = st.date_input("Start Date", value=pd.Timestamp("2023-01-01"))
             end_date = st.date_input("End Date", value=pd.Timestamp("today"))
+
             if st.button("Fetch Data"):
+
                 with st.spinner("Fetching data..."):
                     data = fetch_data(tickers, start_date, end_date)
+
                 if not data.empty:
                     st.success("Data fetched successfully!")
                     st.subheader("Historical Data")

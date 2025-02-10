@@ -149,7 +149,7 @@ def main():
             return_model_type = st.radio("Select Return Prediction Model:", options=["Linear Regression", "Random Forest"], index=0)
 
             # Forecast horizon and lookback options for prediction
-            forecast_horizon = st.slider("Forecast Horizon (Days):", 1, 30, 5)
+            forecast_horizon = st.slider("Forecast Horizon (Days):", 1, 30, 1)
             lookback = st.slider("Lookback Period (Days):", 1, 30, 5)
 
             try:

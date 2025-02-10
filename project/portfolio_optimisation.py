@@ -17,7 +17,32 @@ def calculate_returns(data):
     return data.pct_change().dropna()
 
 
-# Optimize portfolio weights using mean-variance optimization
+def optimize_portfolio(returns, risk_free_rate):
+    """
+    Optimizes portfolio weights using mean-variance optimization to maximize the Sharpe ratio.
+    
+    :param returns: Pandas DataFrame of asset returns.
+    :param risk_free_rate: Risk-free rate for Sharpe ratio calculation.
+    :return: Optimal asset weights.
+    """
+    mu = returns.mean() * 252  # Annualized expected returns
+    cov_matrix = returns.cov() * 252  # Annualized covariance matrix
+    num_assets = len(mu)
+
+    def sharpe_ratio(weights):
+        portfolio_return = np.dot(weights, mu)
+        portfolio_vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+        return -(portfolio_return - risk_free_rate) / portfolio_vol  # Negative for minimization
+
+    constraints = ({'type': 'eq', 'fun': lambda x: np.sum(x) - 1})  # Weights sum to 1
+    bounds = tuple((0, 1) for _ in range(num_assets))  # No short-selling
+    initial_weights = np.ones(num_assets) / num_assets  # Equal allocation start
+
+    result = minimize(sharpe_ratio, initial_weights, method='SLSQP', bounds=bounds, constraints=constraints)
+    
+    return result.x 
+
+'''# Optimize portfolio weights using mean-variance optimization
 def optimize_portfolio(returns):
     def portfolio_volatility(weights):
         return np.sqrt(np.dot(weights.T, np.dot(returns.cov() * 252, weights)))
@@ -28,7 +53,7 @@ def optimize_portfolio(returns):
     initial_weights = [1 / num_assets] * num_assets
 
     result = minimize(portfolio_volatility, initial_weights, method='SLSQP', bounds=bounds, constraints=constraints)
-    return result.x
+    return result.x '''
 
 # Calculate Value at Risk (VaR) and Conditional VaR (CVaR)
 def calculate_var_cvar(returns, weights, confidence_level=0.95):
