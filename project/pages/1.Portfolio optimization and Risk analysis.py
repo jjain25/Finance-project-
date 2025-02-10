@@ -98,12 +98,13 @@ def main():
 
 
             elif method == "Mean-Variance Optimization":
-                weights = optimize_portfolio(returns,risk_free_rate)
+                weights, sharpe = optimize_portfolio(returns,risk_free_rate)
                 st.write("### Optimal Portfolio Weights")
+                st.write(f"Sharpe ratio: {sharpe}")
                 st.dataframe(pd.DataFrame({'Ticker': tickers, 'Weight': weights}))
 
                 # Plot Efficient Frontier
-                frontier_fig = plot_efficient_frontier(returns)
+                frontier_fig = plot_efficient_frontier(returns, risk_free_rate)
                 st.plotly_chart(frontier_fig)
                 st.write("""
         **Analysis:**  

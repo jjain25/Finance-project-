@@ -40,7 +40,7 @@ def optimize_portfolio(returns, risk_free_rate):
 
     result = minimize(sharpe_ratio, initial_weights, method='SLSQP', bounds=bounds, constraints=constraints)
     
-    return result.x 
+    return result.x , sharpe_ratio(result.x)
 
 '''# Optimize portfolio weights using mean-variance optimization
 def optimize_portfolio(returns):
@@ -84,7 +84,6 @@ def plot_efficient_frontier(returns, risk_free_rate=0.03, num_portfolios=5000):
     cov_matrix = returns.cov() * 252  # annualized covariance matrix
     num_portfolios = 10000  # Number of random portfolios
     results = np.zeros((4, num_portfolios), dtype=object)  # Store results (Returns, Volatility, Sharpe Ratio, Weights)
-    risk_free_rate = 0.03  # Example risk-free rate
 
     for i in range(num_portfolios):
         # Random portfolio weights
