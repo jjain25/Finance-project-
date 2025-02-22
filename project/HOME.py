@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def main():
     # Set up the home page
     st.set_page_config(page_title="Portfolio Optimization and Analytics", layout="wide")
@@ -18,23 +17,45 @@ def main():
         """
     )
 
-    # Add interactive buttons and navigation
-    st.markdown("### Explore the Features:")
-    col1, col2, col3 = st.columns(3)
+    # Interactive sidebar
+    with st.sidebar:
+        st.header("📂 Navigation")
+        page = st.radio(
+            "Go to:",
+            ("Home", "Portfolio Optimization", "PCA and Forecasting", "User-Defined Portfolio")
+        )
 
-    with col1:
-        if st.button("Portfolio Optimization"):
-            st.write("Navigate to the Portfolio Optimization section from the sidebar to analyze and optimize portfolios.")
-        
-    with col2:
-        if st.button("PCA and Forecasting"):
-            st.write("Head to the Advance analysis tab to uncover hidden patterns and predict future returns or volatility.")
+        st.header("📅 Date Range Selector")
+        start_date = st.date_input("Start Date")
+        end_date = st.date_input("End Date")
+        st.write(f"Selected date range: {start_date} to {end_date}")
 
-    with col3:
-        if st.button("User-Defined Portfolio"):
-            st.write("Go to the User-Defined Portfolio section to define and analyze your custom portfolio allocation.")
+        st.header("⚙️ Adjust Parameters")
+        risk_tolerance = st.slider("Risk Tolerance Level:", 0, 10, 5)
+        st.write(f"Selected Risk Tolerance: {risk_tolerance}")
 
-    # Use collapsible sections to explain features
+        custom_weights = st.checkbox("Customize Portfolio Weights")
+        if custom_weights:
+            st.text_input("Enter weights (comma-separated):", placeholder="e.g., 0.4, 0.3, 0.3")
+
+        st.header("📩 Contact Us")
+        st.text("Have questions? Get in touch!")
+        st.text_input("Your Email:", placeholder="Enter your email")
+        st.text_area("Message:", placeholder="Type your message here")
+        if st.button("Send Message"):
+            st.success("Message sent successfully!")
+
+    # Display content based on sidebar navigation
+    if page == "Home":
+        st.markdown("### Welcome to the Home Page!")
+    elif page == "Portfolio Optimization":
+        st.markdown("### Portfolio Optimization Section")
+    elif page == "PCA and Forecasting":
+        st.markdown("### PCA and Forecasting Section")
+    elif page == "User-Defined Portfolio":
+        st.markdown("### User-Defined Portfolio Section")
+
+    # Collapsible sections for extra details
     with st.expander("📈 About This Application"):
         st.markdown(
             """
@@ -61,15 +82,13 @@ def main():
             """
         )
 
-    # Add an image or visual representation (optional)
+    # Add an image or visual representation
     st.image(
         "https://miro.medium.com/v2/resize:fit:825/1*TtTQVg3OKWOjkwPxoKG2Fg.jpeg",
         caption="Visualize and Optimize Your Portfolio",
-        use_container_width=True,
-        
+        use_column_width=True,
     )
 
-    
     # Disclaimer section
     st.markdown(
         """
